@@ -1,6 +1,6 @@
-package com.dragoncoredev.gestionpedidosapi.model;
+package com.dragoncoredev.gestion_pedidos_api.model;
 
-import com.dragoncoredev.gestionpedidosapi.model.Proveedor;
+import com.dragoncoredev.gestion_pedidos_api.model.Proveedor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

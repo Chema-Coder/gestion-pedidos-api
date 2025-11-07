@@ -1,4 +1,4 @@
-package com.dragoncoredev.gestionpedidosapi.model;
+package com.dragoncoredev.gestion_pedidos_api.model;
 
 /**
  * Representa los estados por los que puede pasar un pedido

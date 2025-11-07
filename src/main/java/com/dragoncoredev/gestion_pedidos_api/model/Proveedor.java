@@ -1,6 +1,6 @@
-package com.dragoncoredev.gestionpedidosapi.model;
+package com.dragoncoredev.gestion_pedidos_api.model;
 
-import com.dragoncoredev.gestionpedidosapi.model.Producto;
+import com.dragoncoredev.gestion_pedidos_api.model.Producto;
 // Importamos todas las anotaciones de JPA.
 // ¡OJO! En Spring Boot 3+ siempre usamos 'jakarta.persistence', nunca 'javax.persistence'
 import jakarta.persistence.*;
