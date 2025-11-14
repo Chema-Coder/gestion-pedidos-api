@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
 @Setter
@@ -50,6 +51,9 @@ public class Producto {
      *
      * Esto hace que 'Producto' sea el "dueño" de la relación.
      */
+    // ... (otras anotaciones) ...
+
+    @JsonIgnore // <-- ¡LA SOLUCIÓN! Le dice a Jackson que ignore este campo.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proveedor_id", nullable = false)
     private Proveedor proveedor;

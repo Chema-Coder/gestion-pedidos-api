@@ -13,6 +13,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /*
  * --- ANOTACIONES DE LOMBOK ---
@@ -73,6 +75,7 @@ public class Proveedor {
      * "orphanRemoval = true": Si quito un producto de esta lista (pero no lo borro),
      * JPA entiende que ese producto se ha quedado "huérfano" y debe ser borrado de la BBDD.
      */
+    @JsonIgnore // <-- ¡LA SOLUCIÓN! Le dice a Jackson que ignore este campo.
     @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos;
 

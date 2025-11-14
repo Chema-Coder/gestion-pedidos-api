@@ -1,0 +1,14 @@
+### Crear un nuevo Producto
+# Enviamos un POST a nuestro endpoint con un cuerpo JSON.
+# Fíjate que usamos proveedorId: 1 (el que acabamos de crear).
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+  "nombre": "Tornillo de Acero",
+  "descripcion": "Tornillo 5mm para madera",
+  "precio": 0.15,
+  "proveedorId": 1
+}
+
+###

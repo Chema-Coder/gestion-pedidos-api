@@ -1,48 +1,59 @@
 package com.dragoncoredev.gestion_pedidos_api.controller;
 
-// 1. Importamos el "plano" (la entidad/DTO que vamos a devolver)
+// 1. Importamos el DTO que vamos a RECIBIR
+import com.dragoncoredev.gestion_pedidos_api.dto.CrearProductoDTO;
+// 2. Importamos la Entidad
 import com.dragoncoredev.gestion_pedidos_api.model.Producto;
-// 2. Importamos el "cerebro" (el servicio que vamos a usar)
+// 3. Importamos el Servicio
 import com.dragoncoredev.gestion_pedidos_api.service.ProductoService;
 
-// 3. Importamos la "inyección"
 import org.springframework.beans.factory.annotation.Autowired;
-// 4. Importamos las anotaciones web de Spring
+// 4. ¡Importamos las NUEVAS anotaciones!
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping; // <-- ¡NUEVA!
+import org.springframework.web.bind.annotation.RequestBody; // <-- ¡NUEVA!
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus; // <-- ¡NUEVA!
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List; // Necesitamos esto para devolver una lista
+import java.util.List;
 
 /**
  * Controlador REST para gestionar las peticiones relacionadas con Productos.
- * Esta es la "puerta de entrada" de la API.
  */
-@RestController // (1) Le dice a Spring que esto es un Controlador REST (devuelve JSON).
-@RequestMapping("/api/productos") // (2) ¡MEJOR PRÁCTICA!
-// Define la URL base para TODOS los métodos en esta clase.
-// Todas las peticiones a /api/productos vendrán aquí.
+@RestController
+@RequestMapping("/api/productos")
 public class ProductoController {
 
-    // (3) Inyectamos el "cerebro" (el Servicio).
-    // El Controlador *depende* del Servicio para hacer el trabajo.
     @Autowired
     private ProductoService productoService;
-
-    // --- NUESTRO PRIMER ENDPOINT DE API ---
 
     /**
      * Endpoint para obtener todos los productos.
      * Responde a peticiones GET en /api/productos
-     *
-     * @return una lista de todos los productos en formato JSON.
      */
-    @GetMapping // (4) Le dice a Spring: "Este método maneja peticiones HTTP GET".
-    // Como ya tenemos @RequestMapping("/api/productos") en la clase,
-    // este método se activa en la URL base (GET /api/productos).
+    @GetMapping
     public List<Producto> obtenerTodosLosProductos() {
-        // (5) El controlador NO hace lógica.
-        // Simplemente llama al servicio y devuelve lo que este le da.
         return productoService.obtenerTodosLosProductos();
+    }
+
+    // --- ¡NUESTRO ENDPOINT POST! ---
+
+    /**
+     * Endpoint para crear un nuevo producto.
+     * Responde a peticiones POST en /api/productos
+     *
+     * @param productoDTO El DTO (en formato JSON) que viene en el cuerpo de la petición.
+     * @return El Producto entidad que ha sido creado (con su ID) en formato JSON.
+     */
+    @PostMapping // (1) Mapea este método a peticiones HTTP POST
+    @ResponseStatus(HttpStatus.CREATED) // (2) Devuelve un código HTTP 201 (Created)
+    public Producto crearProducto(
+            @RequestBody CrearProductoDTO productoDTO // (3) Mapea el JSON del body a nuestro DTO
+    ) {
+        // (4) El controlador es "tonto". Solo llama al servicio
+        //     y le pasa el DTO para que haga el trabajo.
+        return productoService.crearProducto(productoDTO);
     }
 }
