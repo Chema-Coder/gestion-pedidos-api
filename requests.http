@@ -12,3 +12,21 @@ Content-Type: application/json
 }
 
 ###
+###
+### --- SECCIÓN DE PROVEEDORES ---
+###
+
+### 1. Listar todos los Proveedores (GET)
+# Deberíamos ver al menos el "Proveedor de Ferretería" que creamos manualmente antes
+# y los nuevos que creemos ahora.
+GET http://localhost:8080/api/proveedores
+
+### 2. Crear un nuevo Proveedor (POST)
+# Vamos a crear un segundo proveedor vía API.
+POST http://localhost:8080/api/proveedores
+Content-Type: application/json
+
+{
+  "nombre": "Proveedor de Electrónica",
+  "importeMinimoPedido": 150.00
+}
