@@ -30,3 +30,27 @@ Content-Type: application/json
   "nombre": "Proveedor de Electrónica",
   "importeMinimoPedido": 150.00
 }
+
+###
+### --- SECCIÓN DE PEDIDOS ---
+###
+
+### 1. Listar todos los Pedidos (GET)
+# Inicialmente debería devolver una lista vacía [].
+GET http://localhost:8080/api/pedidos
+
+### 2. Crear un Pedido Completo (POST)
+# Aquí probamos la estructura compleja: Cabecera + Lista de Items.
+# Estamos pidiendo: "Soy Josemari y quiero 10 unidades del producto 1".
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "nombreCliente": "Josemari Empresa SL",
+  "items": [
+    {
+      "productoId": 1,
+      "cantidad": 10
+    }
+  ]
+}

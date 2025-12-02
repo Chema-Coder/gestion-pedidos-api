@@ -3,6 +3,7 @@ package com.dragoncoredev.gestion_pedidos_api.model;
 import com.dragoncoredev.gestion_pedidos_api.model.Pedido;
 import com.dragoncoredev.gestion_pedidos_api.model.Producto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,16 +35,14 @@ public class PedidoItem {
     //     en esta tabla ('pedido_items').
     //     Esto completa la relación que definimos en Pedido.java
     //     con el "mappedBy = 'pedido'".
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore // <-- ¡ESTA ES LA CLAVE! Rompe el bucle infinito.
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
-
     // --- RELACIÓN CON PRODUCTO (El "Artículo") ---
-    // MUCHOS PedidoItems (Many) pueden referirse a UN Producto (One).
-    // (Ej: 5 líneas de pedido diferentes, en 5 pedidos distintos,
-    // pueden estar apuntando todas al producto "Tornillo 5mm").
-    //
-    @ManyToOne(fetch = FetchType.LAZY)
+    // ¡AQUÍ ES DONDE NECESITAMOS EL CAMBIO!
+    // Buscamos el campo 'producto' y ponemos FetchType.EAGER
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
