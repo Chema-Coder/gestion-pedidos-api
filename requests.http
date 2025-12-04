@@ -37,7 +37,7 @@ Content-Type: application/json
 
 ### 1. Listar todos los Pedidos (GET)
 # Inicialmente debería devolver una lista vacía [].
-GET http://localhost:8080/api/pedidos
+
 
 ### 2. Crear un Pedido Completo (POST)
 # Aquí probamos la estructura compleja: Cabecera + Lista de Items.
@@ -52,5 +52,27 @@ Content-Type: application/json
       "productoId": 1,
       "cantidad": 10
     }
+  ]
+}GET http://localhost:8080/api/pedidos
+
+### Prueba de Regla de Negocio: Pedido que NO llega al mínimo (1.50 < 50.00)
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "nombreCliente": "Cliente Minorista",
+  "items": [
+    { "productoId": 1, "cantidad": 10 }
+  ]
+}
+
+### Prueba de Regla de Negocio: Pedido que SÍ supera al mínimo (150.00 > 50.00)
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "nombreCliente": "Gran Empresa SL",
+  "items": [
+    { "productoId": 1, "cantidad": 1000 }
   ]
 }

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime; // La clase moderna de Java para fecha y hora
 import java.util.ArrayList; // Importamos ArrayList para inicializar la lista
 import java.util.List;
@@ -52,6 +53,8 @@ public class Pedido {
 
     // Mapeo estándar de un booleano. Se convertirá en 'boolean' en PostgreSQL.
     // Lo inicializamos a 'false' por defecto.
+    @Column(nullable = false)
+    private BigDecimal total = BigDecimal.ZERO;
     private boolean esPedidoInterno = false;
 
     // --- RELACIÓN CON PedidoItem ---
@@ -67,6 +70,8 @@ public class Pedido {
     //     todos mis 'PedidoItem' hijos. Si quito un 'PedidoItem'
     //     de esta lista, bórralo de la BBDD".
     //     Es una relación de "composición" (padre-hijo).
+    //
+    // Guardamos el total calculado para no tener que sumarlo cada vez.
     //
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     //

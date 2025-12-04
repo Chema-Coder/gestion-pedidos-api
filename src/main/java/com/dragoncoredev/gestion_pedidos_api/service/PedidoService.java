@@ -5,14 +5,16 @@ import com.dragoncoredev.gestion_pedidos_api.dto.PedidoItemDTO;
 import com.dragoncoredev.gestion_pedidos_api.model.Pedido;
 import com.dragoncoredev.gestion_pedidos_api.model.PedidoItem;
 import com.dragoncoredev.gestion_pedidos_api.model.Producto;
-import com.dragoncoredev.gestion_pedidos_api.model.EstadoPedido;
+import com.dragoncoredev.gestion_pedidos_api.model.Proveedor; // Necesario para consultar el mínimo
+import com.dragoncoredev.gestion_pedidos_api.model.EstadoPedido; // Corregido: ya no está en .enums
 import com.dragoncoredev.gestion_pedidos_api.repository.PedidoRepository;
 import com.dragoncoredev.gestion_pedidos_api.repository.ProductoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional; // ¡IMPORTANTE! Usar jakarta.transaction o org.springframework.transaction
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class PedidoService {
     private PedidoRepository pedidoRepository;
 
     @Autowired
-    private ProductoRepository productoRepository; // Necesitamos buscar productos
+    private ProductoRepository productoRepository;
 
     /**
      * Obtiene todos los pedidos.
@@ -33,13 +35,10 @@ public class PedidoService {
     }
 
     /**
-     * Crea un pedido completo con sus líneas de detalle.
+     * Crea un pedido completo, calcula totales y aplica reglas de negocio.
      *
-     * @Transactional: ¡VITAL!
-     * Significa "Todo o Nada". Si guardamos la cabecera del pedido,
-     * pero falla el guardado de una línea (ej: producto no existe),
-     * Spring hará un "Rollback" y borrará la cabecera.
-     * Evita tener pedidos "zombis" sin líneas o datos corruptos.
+     * @Transactional: Si algo falla (ej: producto no existe), se hace rollback
+     * de todo el proceso para no dejar datos corruptos.
      */
     @Transactional
     public Pedido crearPedido(CrearPedidoDTO dto) {
@@ -47,32 +46,67 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setNombreCliente(dto.nombreCliente());
         pedido.setFechaCreacion(LocalDateTime.now());
-        pedido.setEstado(EstadoPedido.RECIBIDO_CLIENTE); // Estado inicial por defecto
         pedido.setEsPedidoInterno(false);
 
+        // Inicializamos el total acumulado en CERO
+        BigDecimal totalAcumulado = BigDecimal.ZERO;
+
+        // Variable para recordar al proveedor y validar su regla de mínimo.
+        // (En este MVP asumimos que el pedido es monoveedor o validamos contra el primero que encontremos).
+        Proveedor proveedorDelPedido = null;
+
         // 2. Procesar las líneas (Items)
-        // Recorremos la lista de items que nos envía el DTO
         for (PedidoItemDTO itemDto : dto.items()) {
-            // A. Buscamos el producto real (o fallamos si no existe)
+            // A. Buscar el producto real
             Producto producto = productoRepository.findById(itemDto.productoId())
                     .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado ID: " + itemDto.productoId()));
 
-            // B. Creamos la entidad PedidoItem
+            // Capturamos el proveedor del primer producto para validar las reglas después
+            if (proveedorDelPedido == null) {
+                proveedorDelPedido = producto.getProveedor();
+            }
+
+            // B. Crear la entidad PedidoItem
             PedidoItem item = new PedidoItem();
             item.setCantidad(itemDto.cantidad());
             item.setProducto(producto);
 
-            // C. ¡LA CLAVE DE LA RELACIÓN BIDIRECCIONAL!
-            // Conectamos el hijo con el padre
+            // C. Conectar la relación bidireccional (Padre <-> Hijo)
             item.setPedido(pedido);
-
-            // Conectamos el padre con el hijo (añadiendo a la lista)
             pedido.getItems().add(item);
+
+            // D. --- CÁLCULO DEL PRECIO DE LA LÍNEA ---
+            // Precio = PrecioProducto * Cantidad
+            // En Java (BigDecimal) se usa .multiply()
+            BigDecimal precioLinea = producto.getPrecio().multiply(new BigDecimal(itemDto.cantidad()));
+
+            // Sumamos al total general del pedido
+            totalAcumulado = totalAcumulado.add(precioLinea);
         }
 
-        // 3. Guardar en Cascada
-        // Gracias a 'cascade = CascadeType.ALL' en la entidad Pedido,
-        // al guardar el pedido, JPA guardará automáticamente todos los items.
+        // 3. Guardar el Total calculado en el pedido
+        pedido.setTotal(totalAcumulado);
+
+        // 4. --- REGLA DE NEGOCIO: VALIDAR IMPORTE MÍNIMO ---
+        // Decidimos el estado inicial basándonos en el dinero.
+        if (proveedorDelPedido != null) {
+            BigDecimal importeMinimo = proveedorDelPedido.getImporteMinimoPedido();
+
+            // Comparamos: ¿Es totalAcumulado >= importeMinimo?
+            // (compareTo devuelve: 1 si es mayor, 0 si es igual, -1 si es menor)
+            if (totalAcumulado.compareTo(importeMinimo) >= 0) {
+                // ¡Éxito! Supera el mínimo, el pedido puede salir.
+                pedido.setEstado(EstadoPedido.PEDIDO_A_PROVEEDOR);
+            } else {
+                // Fracaso. No llega al mínimo. Se queda retenido.
+                pedido.setEstado(EstadoPedido.EN_ESPERA_PROVEEDOR);
+            }
+        } else {
+            // Caso borde: Si no hubiera proveedor, estado por defecto.
+            pedido.setEstado(EstadoPedido.RECIBIDO_CLIENTE);
+        }
+
+        // 5. Guardar todo en la BBDD (Pedido + Items)
         return pedidoRepository.save(pedido);
     }
 }
