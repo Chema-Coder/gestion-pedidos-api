@@ -46,14 +46,17 @@ POST http://localhost:8080/api/pedidos
 Content-Type: application/json
 
 {
-  "nombreCliente": "Josemari Empresa SL",
+  "nombreCliente": "Josemari Empresa Saboteador SL",
   "items": [
     {
-      "productoId": 1,
+      "productoId": 9999,
       "cantidad": 10
     }
   ]
-}GET http://localhost:8080/api/pedidos
+}
+
+#########
+GET http://localhost:8080/api/pedidos
 
 ### Prueba de Regla de Negocio: Pedido que NO llega al mínimo (1.50 < 50.00)
 POST http://localhost:8080/api/pedidos
