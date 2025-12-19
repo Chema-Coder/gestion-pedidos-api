@@ -79,3 +79,19 @@ Content-Type: application/json
     { "productoId": 1, "cantidad": 1000 }
   ]
 }
+
+### Prueba de Validación: Datos inválidos
+# Intentamos colar cantidad negativa y cliente vacío.
+# Debería devolver 400 Bad Request.
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "nombreCliente": "",
+  "items": [
+    {
+      "productoId": 1,
+      "cantidad": -5
+    }
+  ]
+}

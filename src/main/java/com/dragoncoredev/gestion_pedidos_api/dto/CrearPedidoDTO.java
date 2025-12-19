@@ -1,16 +1,17 @@
 package com.dragoncoredev.gestion_pedidos_api.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.List;
 
-/**
- * DTO para crear un pedido completo.
- * Contiene la información de cabecera y la lista de productos.
- *
- * @param nombreCliente El nombre del cliente que hace el pedido.
- * @param items La lista de productos y cantidades que quiere pedir.
- */
 public record CrearPedidoDTO(
+        @NotBlank(message = "El nombre del cliente no puede estar vacío")
         String nombreCliente,
-        List<PedidoItemDTO> items // ¡Aquí usamos el DTO que acabamos de crear!
+
+        @NotEmpty(message = "El pedido debe tener al menos una línea")
+        @Valid // <-- ¡OJO! Esto le dice a Spring que entre a validar también los objetos de la lista
+        List<PedidoItemDTO> items
 ) {
 }

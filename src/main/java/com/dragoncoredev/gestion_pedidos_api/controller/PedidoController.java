@@ -3,6 +3,7 @@ package com.dragoncoredev.gestion_pedidos_api.controller;
 import com.dragoncoredev.gestion_pedidos_api.dto.CrearPedidoDTO;
 import com.dragoncoredev.gestion_pedidos_api.model.Pedido;
 import com.dragoncoredev.gestion_pedidos_api.service.PedidoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,8 @@ public class PedidoController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pedido crearPedido(@RequestBody CrearPedidoDTO dto) {
+    // Añadimos @Valid para que se ejecuten las comprobaciones de los DTOs
+    public Pedido crearPedido(@Valid @RequestBody CrearPedidoDTO dto) {
         return pedidoService.crearPedido(dto);
     }
 }
