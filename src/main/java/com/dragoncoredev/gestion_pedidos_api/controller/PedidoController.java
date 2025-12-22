@@ -1,6 +1,7 @@
 package com.dragoncoredev.gestion_pedidos_api.controller;
 
 import com.dragoncoredev.gestion_pedidos_api.dto.CrearPedidoDTO;
+import com.dragoncoredev.gestion_pedidos_api.model.EstadoPedido;
 import com.dragoncoredev.gestion_pedidos_api.model.Pedido;
 import com.dragoncoredev.gestion_pedidos_api.service.PedidoService;
 import jakarta.validation.Valid;
@@ -44,5 +45,12 @@ public class PedidoController {
     @ResponseStatus(HttpStatus.NO_CONTENT) // Devuelve un 204 (Todo ok, sin cuerpo)
     public void eliminarPedido(@PathVariable Long id) {
         pedidoService.borrarPedido(id);
+    }
+
+    // --- 5. BUSCAR POR ESTADO (GET con parámetro) ---
+    // URL ejemplo: /api/pedidos/buscar?estado=PEDIDO_A_PROVEEDOR
+    @GetMapping("/buscar")
+    public List<Pedido> buscarPorEstado(@RequestParam EstadoPedido estado) {
+        return pedidoService.buscarPorEstado(estado);
     }
 }

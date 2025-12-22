@@ -112,3 +112,9 @@ DELETE http://localhost:8080/api/pedidos/1
 
 ### 7. Comprobar que se ha borrado (Debe dar 404)
 GET http://localhost:8080/api/pedidos/1
+
+### 8. Filtro Inteligente: Solo los pedidos pendientes (Estado 0)
+GET http://localhost:8080/api/pedidos/buscar?estado=EN_ESPERA_PROVEEDOR
+
+### 9. Filtro Inteligente: Solo los pedidos grandes (Estado 1)
+GET http://localhost:8080/api/pedidos/buscar?estado=PEDIDO_A_PROVEEDOR

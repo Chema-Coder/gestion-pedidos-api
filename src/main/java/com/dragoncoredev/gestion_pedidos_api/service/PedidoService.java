@@ -138,4 +138,9 @@ public class PedidoService {
         }
         pedidoRepository.deleteById(id);
     }
+
+    // --- BÚSQUEDA POR ESTADO ---
+    public List<Pedido> buscarPorEstado(EstadoPedido estado) {
+        return pedidoRepository.findByEstado(estado);
+    }
 }
