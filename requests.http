@@ -105,3 +105,10 @@ GET http://localhost:8080/api/pedidos/1
 
 ### 5. Probar error de pedido inexistente (Para ver si salta el 404)
 GET http://localhost:8080/api/pedidos/9999
+
+### 6. Borrar un pedido existente (DELETE)
+# Cambia el ID por uno que sepas que existe (ej: 1)
+DELETE http://localhost:8080/api/pedidos/1
+
+### 7. Comprobar que se ha borrado (Debe dar 404)
+GET http://localhost:8080/api/pedidos/1

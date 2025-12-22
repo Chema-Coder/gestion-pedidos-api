@@ -38,4 +38,11 @@ public class PedidoController {
     public Pedido verPedido(@PathVariable Long id) {
         return pedidoService.obtenerPorId(id);
     }
+
+    // --- 4. BORRAR PEDIDO (DELETE) ---
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Devuelve un 204 (Todo ok, sin cuerpo)
+    public void eliminarPedido(@PathVariable Long id) {
+        pedidoService.borrarPedido(id);
+    }
 }

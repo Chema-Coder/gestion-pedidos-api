@@ -126,4 +126,16 @@ public class PedidoService {
         return pedidoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado ID: " + id));
     }
+    // --- NUEVO MÉTODO DE BORRADO (DELETE) ---
+
+    /**
+     * Borra un pedido y, gracias al CascadeType.ALL, también sus líneas.
+     */
+    public void borrarPedido(Long id) {
+        // Primero verificamos si existe. Si no, lanzamos la excepción para que salga el 404 bonito.
+        if (!pedidoRepository.existsById(id)) {
+            throw new EntityNotFoundException("Pedido no encontrado ID: " + id);
+        }
+        pedidoRepository.deleteById(id);
+    }
 }
