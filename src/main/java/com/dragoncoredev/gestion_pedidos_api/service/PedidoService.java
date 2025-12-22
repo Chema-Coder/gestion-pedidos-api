@@ -109,4 +109,21 @@ public class PedidoService {
         // 5. Guardar todo en la BBDD (Pedido + Items)
         return pedidoRepository.save(pedido);
     }
+    // --- NUEVOS MÉTODOS DE LECTURA (GET) ---
+
+    /**
+     * Devuelve la lista completa de pedidos.
+     */
+    public List<Pedido> listarTodos() {
+        return pedidoRepository.findAll();
+    }
+
+    /**
+     * Busca un pedido por su ID.
+     * Si no existe, lanza la excepción que ya controla nuestro GlobalExceptionHandler.
+     */
+    public Pedido obtenerPorId(Long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado ID: " + id));
+    }
 }

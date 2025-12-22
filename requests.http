@@ -95,3 +95,13 @@ Content-Type: application/json
     }
   ]
 }
+
+### 3. Listar TODOS los pedidos (GET)
+GET http://localhost:8080/api/pedidos
+
+### 4. Consultar un pedido específico (GET por ID)
+# Cambia el 1 por el ID que quieras ver
+GET http://localhost:8080/api/pedidos/1
+
+### 5. Probar error de pedido inexistente (Para ver si salta el 404)
+GET http://localhost:8080/api/pedidos/9999
