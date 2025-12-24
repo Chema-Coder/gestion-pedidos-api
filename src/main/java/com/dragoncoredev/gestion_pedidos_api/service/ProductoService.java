@@ -81,4 +81,30 @@ public class ProductoService {
         //    El método 'save()' devuelve la entidad guardada (¡con el ID asignado!).
         return productoRepository.save(nuevoProducto);
     }
+
+    // --- ACTUALIZAR PRODUCTO (PUT) ---
+    public Producto actualizarProducto(Long id, Producto datosNuevos) {
+        // 1. Buscamos el producto antiguo (o fallamos si no existe)
+        Producto productoAntiguo = productoRepository.findById(id)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Producto no encontrado ID: " + id));
+
+        // 2. Actualizamos los campos (Nombre, Descripción, Precio)
+        productoAntiguo.setNombre(datosNuevos.getNombre());
+        productoAntiguo.setDescripcion(datosNuevos.getDescripcion());
+        productoAntiguo.setPrecio(datosNuevos.getPrecio());
+
+        // 3. Guardamos los cambios
+        return productoRepository.save(productoAntiguo);
+    }
+
+    // --- MÉTODOS DE LECTURA (GET) ---
+
+    public java.util.List<Producto> listarProductos() {
+        return productoRepository.findAll();
+    }
+
+    public Producto obtenerPorId(Long id) {
+        return productoRepository.findById(id)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Producto no encontrado ID: " + id));
+    }
 }

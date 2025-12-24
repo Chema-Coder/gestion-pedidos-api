@@ -118,3 +118,17 @@ GET http://localhost:8080/api/pedidos/buscar?estado=EN_ESPERA_PROVEEDOR
 
 ### 9. Filtro Inteligente: Solo los pedidos grandes (Estado 1)
 GET http://localhost:8080/api/pedidos/buscar?estado=PEDIDO_A_PROVEEDOR
+
+### 10. Actualizar Producto (PUT) - Subida de precios
+# Cambiamos el precio del Tornillo (ID 1) de 0.15 a 0.25
+PUT http://localhost:8080/api/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Tornillo de Acero Mejorado",
+  "descripcion": "Tornillo 5mm reforzado",
+  "precio": 0.25
+}
+
+### 11. Verificar el cambio (GET)
+GET http://localhost:8080/api/productos/1
