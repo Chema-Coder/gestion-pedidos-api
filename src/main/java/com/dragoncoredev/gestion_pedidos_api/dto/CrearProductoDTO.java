@@ -1,22 +1,21 @@
 package com.dragoncoredev.gestion_pedidos_api.dto;
 
-import java.math.BigDecimal;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 
-/**
- * DTO (Data Transfer Object) para crear un nuevo Producto.
- * Esto define el "contrato" de la API, lo que esperamos recibir.
- * Usamos un 'record' para una definición concisa e inmutable.
- *
- * @param nombre El nombre del producto.
- * @param descripcion Una descripción opcional.
- * @param precio El precio del producto.
- * @param proveedorId El ID del Proveedor al que este producto pertenece.
- */
 public record CrearProductoDTO(
+        @NotBlank(message = "El nombre es obligatorio")
         String nombre,
-        String descripcion,
-        BigDecimal precio,
-        Long proveedorId // ¡Nota clave! Pedimos el ID, no la entidad Proveedor entera.
-) {
-}
 
+        String descripcion,
+
+        @NotNull(message = "El precio es obligatorio")
+        @Positive(message = "El precio debe ser mayor que cero")
+        Double precio,
+
+        // --- NUEVO CAMPO ---
+        // No le ponemos @NotNull para que sea opcional (si no lo mandan, será 0)
+        @Positive(message = "El stock no puede ser negativo")
+        Integer stock
+) {}
