@@ -14,8 +14,10 @@ public record CrearProductoDTO(
         @Positive(message = "El precio debe ser mayor que cero")
         Double precio,
 
-        // --- NUEVO CAMPO ---
-        // No le ponemos @NotNull para que sea opcional (si no lo mandan, será 0)
         @Positive(message = "El stock no puede ser negativo")
-        Integer stock
+        Integer stock,
+
+        // --- NUEVO CAMPO ---
+        @NotNull(message = "El ID del proveedor es obligatorio")
+        Long proveedorId
 ) {}

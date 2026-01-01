@@ -172,3 +172,15 @@ Content-Type: application/json
 ### 15. Verificar Stock Restante (GET Producto)
 # Debería quedar en 40 (50 iniciales - 10 vendidos)
 GET http://localhost:8080/api/productos/1
+
+### 16. Verificar Actualización BBDD Asus (Crear Producto con Stock)
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+  "nombre": "Producto Test Asus",
+  "descripcion": "Verificando que la tabla tiene columna stock",
+  "precio": 10.50,
+  "stock": 100,
+  "proveedorId": 1
+}
