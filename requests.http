@@ -184,3 +184,32 @@ Content-Type: application/json
   "stock": 100,
   "proveedorId": 1
 }
+
+### 17. Prueba de Fuego en Asus: Compra con descuento de Stock
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "nombreCliente": "Cliente Asus",
+  "items": [
+    {
+      "productoId": 4,
+      "cantidad": 10
+    }
+  ]
+}
+
+### 18. Listar todos los proveedores
+GET http://localhost:8080/api/proveedores
+
+### 19. Editar Proveedor (Cambio de nombre)
+PUT http://localhost:8080/api/proveedores/1
+Content-Type: application/json
+
+{
+  "nombre": "Proveedor de Electrónica VIP",
+  "importeMinimoPedido": 200.00
+}
+
+### 20. Ver Proveedor modificado
+GET http://localhost:8080/api/proveedores/1

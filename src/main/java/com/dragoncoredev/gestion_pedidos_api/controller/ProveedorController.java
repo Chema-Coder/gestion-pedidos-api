@@ -1,37 +1,51 @@
 package com.dragoncoredev.gestion_pedidos_api.controller;
 
-import com.dragoncoredev.gestion_pedidos_api.dto.CrearProveedorDTO;
 import com.dragoncoredev.gestion_pedidos_api.model.Proveedor;
 import com.dragoncoredev.gestion_pedidos_api.service.ProveedorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/proveedores") // (1) URL Base: Todas las peticiones aquí serán para proveedores
+@RequestMapping("/api/proveedores")
 public class ProveedorController {
 
-    @Autowired
-    private ProveedorService proveedorService; // (2) Inyectamos el cerebro
+    private final ProveedorService proveedorService;
 
-    /**
-     * GET /api/proveedores
-     * Devuelve la lista completa de proveedores.
-     */
-    @GetMapping
-    public List<Proveedor> obtenerTodos() {
-        return proveedorService.obtenerTodos();
+    public ProveedorController(ProveedorService proveedorService) {
+        this.proveedorService = proveedorService;
     }
 
-    /**
-     * POST /api/proveedores
-     * Crea un nuevo proveedor.
-     */
+    // 1. Crear
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) // (3) Devolvemos 201 Created
-    public Proveedor crearProveedor(@RequestBody CrearProveedorDTO dto) {
-        return proveedorService.crearProveedor(dto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Proveedor crearProveedor(@RequestBody Proveedor proveedor) {
+        return proveedorService.crearProveedor(proveedor);
+    }
+
+    // 2. Listar Todos
+    @GetMapping
+    public List<Proveedor> listarProveedores() {
+        return proveedorService.listarTodos();
+    }
+
+    // 3. Ver uno
+    @GetMapping("/{id}")
+    public Proveedor verProveedor(@PathVariable Long id) {
+        return proveedorService.obtenerPorId(id);
+    }
+
+    // 4. Editar
+    @PutMapping("/{id}")
+    public Proveedor actualizarProveedor(@PathVariable Long id, @RequestBody Proveedor proveedor) {
+        return proveedorService.actualizarProveedor(id, proveedor);
+    }
+
+    // 5. Borrar
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminarProveedor(@PathVariable Long id) {
+        proveedorService.borrarProveedor(id);
     }
 }
