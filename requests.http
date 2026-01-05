@@ -213,3 +213,21 @@ Content-Type: application/json
 
 ### 20. Ver Proveedor modificado
 GET http://localhost:8080/api/proveedores/1
+
+### 21. Consultar Dashboard (Estadísticas Generales)
+GET http://localhost:8080/api/dashboard
+
+### 22. Provocar Alerta de Stock (PUT)
+# Bajamos el stock del Producto 1 a solo 5 unidades
+PUT http://localhost:8080/api/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Tornillo de Acero",
+  "descripcion": "Tornillo casi agotado",
+  "precio": 0.25,
+  "stock": 5
+}
+
+### 23. Verificar Alerta en Dashboard (GET)
+GET http://localhost:8080/api/dashboard

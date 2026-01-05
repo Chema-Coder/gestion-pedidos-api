@@ -19,4 +19,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     // ¡Magia! Solo con definir esto, Spring sabe hacer el "WHERE estado = ?"
     List<Pedido> findByEstado(EstadoPedido estado);
+    // Cuenta cuántos pedidos hay en un estado concreto
+    long countByEstado(com.dragoncoredev.gestion_pedidos_api.model.EstadoPedido estado);
 }

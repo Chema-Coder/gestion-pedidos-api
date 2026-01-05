@@ -31,4 +31,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     // Más adelante, aquí podremos definir métodos de búsqueda personalizados
     // E.g: List<Producto> findByNombreContaining(String nombre);
     // Y Spring lo implementará solo, ¡solo por el nombre!
+
+    // Busca productos que tengan MENOS stock que la cantidad indicada
+    java.util.List<Producto> findByStockLessThan(Integer cantidad);
 }
