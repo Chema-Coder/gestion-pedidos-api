@@ -32,13 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-
-
-### SECRETS Y LOGS  ###
-# Ignora ficheros de log que podamos generar
+### LOGS ###
 *.log
-
-# ¡¡LA LÍNEA MÁS IMPORTANTE!!
-# Ignora el fichero que contiene nuestra contraseña de BBDD.
-# Usamos la ruta completa para ser 100% explícitos.
-/src/main/resources/application.properties
