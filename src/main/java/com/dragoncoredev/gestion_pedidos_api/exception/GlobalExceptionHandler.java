@@ -15,7 +15,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1. Error 404: Recurso no encontrado
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorDTO> manejarNoEncontrado(EntityNotFoundException ex) {
         ErrorDTO error = new ErrorDTO(
@@ -25,7 +24,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    // 2. Error 400: Validaciones (@Valid) fallidas
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> manejarValidaciones(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
@@ -37,7 +35,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    // 3. Error 400: Argumento inválido (Ej: Stock insuficiente) <--- NUEVO
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorDTO> manejarArgumentoInvalido(IllegalArgumentException ex) {
         ErrorDTO error = new ErrorDTO(

@@ -1,6 +1,6 @@
 package com.dragoncoredev.gestion_pedidos_api.controller;
 
-import com.dragoncoredev.gestion_pedidos_api.dto.CrearProductoDTO; // <--- IMPORTANTE: Añadido
+import com.dragoncoredev.gestion_pedidos_api.dto.CrearProductoDTO;
 import com.dragoncoredev.gestion_pedidos_api.model.Producto;
 import com.dragoncoredev.gestion_pedidos_api.service.ProductoService;
 import jakarta.validation.Valid;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-@Tag(name = "Catálogo de Productos", description = "Operaciones para gestionar el inventario, precios y stock") // <--- TÍTULO DE LA SECCIÓN
+@Tag(name = "Catálogo de Productos", description = "Operaciones para gestionar el inventario, precios y stock")
 public class ProductoController {
 
     private final ProductoService productoService;
@@ -24,7 +24,7 @@ public class ProductoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Crear un nuevo producto", description = "Registra un producto con stock inicial y asignado a un proveedor existente.") // <--- EXPLICACIÓN
+    @Operation(summary = "Crear un nuevo producto", description = "Registra un producto con stock inicial y asignado a un proveedor existente.")
     public Producto crearProducto(@Valid @RequestBody CrearProductoDTO dto) {
         return productoService.crearProducto(dto);
     }

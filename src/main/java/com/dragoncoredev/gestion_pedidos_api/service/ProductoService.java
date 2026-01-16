@@ -14,9 +14,9 @@ import java.util.List;
 public class ProductoService {
 
     private final ProductoRepository productoRepository;
-    private final ProveedorRepository proveedorRepository; // Nuevo repositorio inyectado
+    private final ProveedorRepository proveedorRepository;
 
-    // Constructor actualizado con las dos dependencias
+
     public ProductoService(ProductoRepository productoRepository, ProveedorRepository proveedorRepository) {
         this.productoRepository = productoRepository;
         this.proveedorRepository = proveedorRepository;
@@ -24,7 +24,7 @@ public class ProductoService {
 
     // --- 1. CREAR PRODUCTO (POST) ---
     public Producto crearProducto(CrearProductoDTO dto) {
-        // Buscamos el proveedor primero
+
         Proveedor proveedor = proveedorRepository.findById(dto.proveedorId())
                 .orElseThrow(() -> new EntityNotFoundException("Proveedor no encontrado ID: " + dto.proveedorId()));
 
@@ -32,10 +32,10 @@ public class ProductoService {
         producto.setNombre(dto.nombre());
         producto.setDescripcion(dto.descripcion());
         producto.setPrecio(dto.precio());
-        // Asignamos el stock (si viene nulo, ponemos 0)
+
         producto.setStock(dto.stock() != null ? dto.stock() : 0);
 
-        // ¡Asignamos el proveedor!
+
         producto.setProveedor(proveedor);
 
         return productoRepository.save(producto);
@@ -64,8 +64,6 @@ public class ProductoService {
         if (datosNuevos.getStock() != null) {
             productoAntiguo.setStock(datosNuevos.getStock());
         }
-
-        // Nota: De momento no implementamos cambiar de proveedor en el PUT para no complicarlo
 
         return productoRepository.save(productoAntiguo);
     }

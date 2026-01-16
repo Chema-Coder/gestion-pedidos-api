@@ -25,23 +25,23 @@ public class DashboardService {
 
     public DashboardDTO obtenerMetricas() {
         // 1. Calcular Ingresos Totales (Sumar todos los pedidos)
-        // Usamos programación funcional (Streams) para sumar
+
         List<Pedido> todosLosPedidos = pedidoRepository.findAll();
         double ingresos = todosLosPedidos.stream()
-                .map(Pedido::getTotal) // Sacamos el total de cada pedido
-                .reduce(BigDecimal.ZERO, BigDecimal::add) // Los sumamos
-                .doubleValue(); // Convertimos a double simple
+                .map(Pedido::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .doubleValue();
 
-        // 2. Contar Pedidos Pendientes (Usando el método mágico del repo)
+        // 2. Contar Pedidos Pendientes
         long pendientes = pedidoRepository.countByEstado(EstadoPedido.EN_ESPERA_PROVEEDOR);
 
-        // 3. Detectar Stock Bajo (Menos de 10 unidades)
+        // 3. Detectar Stock Bajo
         List<Producto> productosEscasos = productoRepository.findByStockLessThan(10);
         List<String> nombresAlerta = productosEscasos.stream()
-                .map(p -> p.getNombre() + " (" + p.getStock() + ")") // Formato: "Tornillo (5)"
+                .map(p -> p.getNombre() + " (" + p.getStock() + ")")
                 .collect(Collectors.toList());
 
-        // 4. Empaquetar todo en el DTO
+        // 4. Empaquetar
         return new DashboardDTO(ingresos, pendientes, nombresAlerta);
     }
 }

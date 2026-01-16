@@ -33,24 +33,22 @@ public class PedidoService {
 
         BigDecimal totalAcumulado = BigDecimal.ZERO;
 
-        // Procesamos cada línea del pedido
         for (PedidoItemDTO itemDTO : dto.items()) {
-            // Buscamos el producto
+
             Producto producto = productoRepository.findById(itemDTO.productoId())
                     .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado ID: " + itemDTO.productoId()));
 
             // --- LÓGICA DE STOCK ---
-            // 1. Validamos si hay suficiente
+
             if (producto.getStock() < itemDTO.cantidad()) {
                 throw new IllegalArgumentException("Stock insuficiente para el producto: " + producto.getNombre()
                         + ". Disponible: " + producto.getStock()
                         + ", Solicitado: " + itemDTO.cantidad());
             }
 
-            // 2. Restamos y guardamos (Actualizamos el inventario)
             producto.setStock(producto.getStock() - itemDTO.cantidad());
             productoRepository.save(producto);
-            // -----------------------
+
 
             PedidoItem item = new PedidoItem();
             item.setCantidad(itemDTO.cantidad());

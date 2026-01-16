@@ -17,7 +17,6 @@ public record CrearProductoDTO(
         @Positive(message = "El stock no puede ser negativo")
         Integer stock,
 
-        // --- NUEVO CAMPO ---
         @NotNull(message = "El ID del proveedor es obligatorio")
         Long proveedorId
 ) {}

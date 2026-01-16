@@ -14,16 +14,12 @@ public class Producto {
     private String descripcion;
     private Double precio;
 
-    // --- NUEVO CAMPO: STOCK ---
-    // Lo inicializamos a 0 para que nunca sea nulo al crear el objeto en Java
     private Integer stock = 0;
 
-    // --- RELACIÓN CON PROVEEDOR (Ya la tenías) ---
+    // --- RELACIÓN CON PROVEEDOR
     @ManyToOne
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
-
-    // --- CONSTRUCTORES ---
 
     public Producto() {
     }
@@ -36,7 +32,6 @@ public class Producto {
         this.stock = stock;
     }
 
-    // --- GETTERS Y SETTERS ---
 
     public Long getId() {
         return id;
@@ -70,7 +65,6 @@ public class Producto {
         this.precio = precio;
     }
 
-    // --- AQUÍ ESTÁN LOS QUE TE FALTABAN ---
     public Integer getStock() {
         return stock;
     }
@@ -78,7 +72,6 @@ public class Producto {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-    // ---------------------------------------
 
     public Proveedor getProveedor() {
         return proveedor;

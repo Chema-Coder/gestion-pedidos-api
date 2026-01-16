@@ -11,7 +11,7 @@ public record CrearPedidoDTO(
         String nombreCliente,
 
         @NotEmpty(message = "El pedido debe tener al menos una línea")
-        @Valid // <-- ¡OJO! Esto le dice a Spring que entre a validar también los objetos de la lista
+        @Valid 
         List<PedidoItemDTO> items
 ) {
 }

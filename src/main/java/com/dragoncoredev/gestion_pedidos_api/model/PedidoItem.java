@@ -13,7 +13,7 @@ public class PedidoItem {
 
     @ManyToOne
     @JoinColumn(name = "pedido_id")
-    @JsonBackReference // Evita bucles infinitos al convertir a JSON
+    @JsonBackReference
     private Pedido pedido;
 
     @ManyToOne
@@ -21,15 +21,10 @@ public class PedidoItem {
     private Producto producto;
 
     private Integer cantidad;
-
-    // --- NUEVO CAMPO QUE FALTABA ---
     private Double precioUnitario;
 
-    // --- CONSTRUCTORES ---
     public PedidoItem() {
     }
-
-    // --- GETTERS Y SETTERS ---
 
     public Long getId() {
         return id;
@@ -63,7 +58,6 @@ public class PedidoItem {
         this.cantidad = cantidad;
     }
 
-    // --- AQUÍ ESTÁN LOS CULPABLES DEL ERROR ---
     public Double getPrecioUnitario() {
         return precioUnitario;
     }
